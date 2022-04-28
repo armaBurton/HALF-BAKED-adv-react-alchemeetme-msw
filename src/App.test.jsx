@@ -23,9 +23,12 @@ const user = {
   color: 'crimson',
 }
 
-const server  = setupServer(
+const server = setupServer(
   rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) => {
     return res(ctx.json([user]));
+  }),
+  rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) => {
+    return res(ctx.json([sasuke]))
   })
 )
 
@@ -65,13 +68,11 @@ describe('App', () => {
 
 
     // 🚨 Use the server to change the response for this test
-    return waitFor(async () => {
-      render(<App />)
-      
-      const profileName = await screen.findByText(sasuke.name)
-      
-      console.log('profilename', profileName.body);
-      expect(profileName).toBeInTheDocument()
-    });
+    render(<App />)
+    
+    
+    const profileName = await screen.findByText(sasuke.name)
+    
+    expect(profileName).toBeInTheDocument();
   })
 });
