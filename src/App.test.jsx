@@ -2,7 +2,7 @@
 // 🚨🚨 https://mswjs.io/docs/ 🚨🚨
 
 import fetch from 'cross-fetch';
-import { screen, render } from '@testing-library/react';
+import { screen, render, waitFor } from '@testing-library/react';
 // 🚨
 // import rest
 import { rest } from 'msw';
@@ -38,38 +38,40 @@ beforeAll(() => server.listen());
 afterAll(() => server.close());
 
 describe('App', () => {
-test('Should render the header', async () => {
-  render(<App />)
-  const banner = screen.getByRole('banner')
-  const headerImg = screen.getByAltText(/alchemy/i)
-  const profileName = await screen.findByText(user.name)
+  test('Should render the header', async () => {
+    render(<App />)
+    const banner = screen.getByRole('banner')
+    const headerImg = screen.getByAltText(/alchemy/i)
+    const profileName = await screen.findByText(user.name)
 
-  expect(banner).toHaveStyle({
-    background: 'var(--grey)',
+    expect(banner).toHaveStyle({
+      background: 'var(--grey)',
+    })
+    expect(headerImg).toBeInTheDocument()
+    expect(profileName).toBeInTheDocument()
   })
-  expect(headerImg).toBeInTheDocument()
-  expect(profileName).toBeInTheDocument()
-})
 
-test('Should render the header with Sasuke 🌬️🔥', async () => {
-  const sasuke = {
-    id: 1,
-    created_at: '2021-12-13T00:17:29+00:00',
-    name: 'Sasuke 🌬️🔥',
-    avatar: 'https://thumbs.gfycat.com/NiceRequiredGrunion-size_restricted.gif',
-    header: 'https://static.wikia.nocookie.net/naruto/images/5/50/Team_Kakashi.png',
-    likes: ['React', 'Anime', 'Traveling', 'Living', 'Tower Defense Games', 'Card Games'],
-    motto: 'Res Non Verba',
-    color: 'crimson',
-  }
+  test('Should render the header with Sasuke 🌬️🔥', async () => {
+    const sasuke = {
+      id: 1,
+      created_at: '2021-12-13T00:17:29+00:00',
+      name: 'Sasuke 🌬️🔥',
+      avatar: 'https://thumbs.gfycat.com/NiceRequiredGrunion-size_restricted.gif',
+      header: 'https://static.wikia.nocookie.net/naruto/images/5/50/Team_Kakashi.png',
+      likes: ['React', 'Anime', 'Traveling', 'Living', 'Tower Defense Games', 'Card Games'],
+      motto: 'Res Non Verba',
+      color: 'crimson',
+    }
 
 
-  // 🚨 Use the server to change the response for this test
-
-  render(<App />)
-
-  const profileName = await screen.findByText(sasuke.name)
-
-  expect(profileName).toBeInTheDocument()
-})
+    // 🚨 Use the server to change the response for this test
+    return waitFor(async () => {
+      render(<App />)
+      
+      const profileName = await screen.findByText(sasuke.name)
+      
+      console.log('profilename', profileName.body);
+      expect(profileName).toBeInTheDocument()
+    });
+  })
 });
