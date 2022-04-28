@@ -37,6 +37,7 @@ beforeAll(() => server.listen());
 // 🚨 Close server when complete
 afterAll(() => server.close());
 
+describe('App', () => {
 test('Should render the header', async () => {
   render(<App />)
   const banner = screen.getByRole('banner')
@@ -71,3 +72,4 @@ test('Should render the header with Sasuke 🌬️🔥', async () => {
 
   expect(profileName).toBeInTheDocument()
 })
+});
