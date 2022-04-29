@@ -2,7 +2,7 @@
 // 🚨🚨 https://mswjs.io/docs/ 🚨🚨
 
 import fetch from 'cross-fetch';
-import { screen, render, waitFor } from '@testing-library/react';
+import { screen, render, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 // 🚨
 // import rest
 import { rest } from 'msw';
@@ -71,8 +71,10 @@ describe('App', () => {
 
     // 🚨 Use the server to change the response for this test
     render(<App />)
-    
-    const profileName = await screen.findByText(sasuke.name)
+    await waitForElementToBeRemoved(screen.getByText(/loading.../i))
+    const profileName = await screen.findByRole('heading', {
+      name: sasuke.name
+    })
     
     console.log('75', sasuke.name);
 
