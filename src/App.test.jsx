@@ -15,7 +15,7 @@ const user = {
   id: 1,
   created_at: '2021-12-13T00:17:29+00:00',
   // 🚨 Add a name here
-  name: 'Sasuke 🌬️🔥',
+  name: 'nermal 🌬️🔥',
   avatar: 'https://thumbs.gfycat.com/NiceRequiredGrunion-size_restricted.gif',
   header: 'https://static.wikia.nocookie.net/naruto/images/5/50/Team_Kakashi.png',
   likes: ['React', 'Anime', 'Traveling', 'Living', 'Tower Defense Games', 'Card Games'],
@@ -26,10 +26,7 @@ const user = {
 const server = setupServer(
   rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) => {
     return res(ctx.json([user]));
-  }),
-  rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) => {
-    return res(ctx.json([sasuke]))
-  })
+  })  
 )
 
 global.fetch = fetch;
@@ -66,13 +63,20 @@ describe('App', () => {
       color: 'crimson',
     }
 
+    server.use(
+      rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) => {
+        return res(ctx.json([sasuke]));
+      })  
+    )
 
     // 🚨 Use the server to change the response for this test
     render(<App />)
     
-    
     const profileName = await screen.findByText(sasuke.name)
     
+    console.log('75', sasuke.name);
+
+
     expect(profileName).toBeInTheDocument();
   })
 });
